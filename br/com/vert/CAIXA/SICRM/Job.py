@@ -4,12 +4,12 @@ import os
 
 class Job():
     @property
-    def env(self):
-        return self.__env
+    def secretScope(self):
+        return self.__secretScope
 
-    @env.setter
-    def env(self,env):
-        self.__env=env
+    @secretScope.setter
+    def env(self,secretScope):
+        self.__secretScope=secretScope
 
     @property
     def URI(self):
@@ -70,7 +70,7 @@ class Job():
     def __init__(self,name,notebook):
         self.URI=os.getenv('SICRM_API')
         self.token=os.getenv('SICRM_Token')
-        self.env=os.getenv('SICRM_ENV')
+        self.secretScope=os.getenv('SICRM_Secret_Scope')
         self.header={"Authorization": "Bearer "+self.token}
         self.notebook=notebook
         self.name=name
@@ -95,17 +95,17 @@ class Job():
                 "cluster_name": "",
                 "spark_version": "8.3.x-scala2.12",
                 "spark_conf": {
-                    "spark.blobcontainer": "{{secrets/"+self.env+"ENV/blobcontainer}}",
-                    "spark.storagewrite": "{{secrets/"+self.env+"ENV/storagewrite}}",
-                    "spark.storageread": "{{secrets/"+self.env+"ENV/storageread}}",
-                    "spark.mountpoint": "{{secrets/"+self.env+"ENV/mountpoint}}",
-                    "spark.SQLServerIPCI": "{{secrets/"+self.env+"ENV/SQLServerIPCI}}",
-                    "spark.SQLServerPortCI": "{{secrets/"+self.env+"ENV/SQLServerPortCI}}",
-                    "spark.SQLServerIPRTDM": "{{secrets/"+self.env+"ENV/SQLServerIPRTDM}}",
-                    "spark.SQLServerPassword": "{{secrets/"+self.env+"ENV/SQLServerPassword}}",
-                    "spark.SQLServerPortRTDM": "{{secrets/"+self.env+"ENV/SQLServerPortRTDM}}",
-                    "spark.SQLServerUser": "{{secrets/"+self.env+"ENV/SQLServerUser}}",
-                    "spark.storageaccount": "{{secrets/"+self.env+"ENV/storageaccount}}"
+                    "spark.blobcontainer": "{{secrets/"+self.secretScope+"/blobcontainer}}",
+                    "spark.storagewrite": "{{secrets/"+self.secretScope+"/storagewrite}}",
+                    "spark.storageread": "{{secrets/"+self.secretScope+"/storageread}}",
+                    "spark.mountpoint": "{{secrets/"+self.secretScope+"/mountpoint}}",
+                    "spark.SQLServerIPCI": "{{secrets/"+self.secretScope+"/SQLServerIPCI}}",
+                    "spark.SQLServerPortCI": "{{secrets/"+self.secretScope+"/SQLServerPortCI}}",
+                    "spark.SQLServerIPRTDM": "{{secrets/"+self.secretScope+"/SQLServerIPRTDM}}",
+                    "spark.SQLServerPassword": "{{secrets/"+self.secretScope+"/SQLServerPassword}}",
+                    "spark.SQLServerPortRTDM": "{{secrets/"+self.secretScope+"/SQLServerPortRTDM}}",
+                    "spark.SQLServerUser": "{{secrets/"+self.secretScope+"/SQLServerUser}}",
+                    "spark.storageaccount": "{{secrets/"+self.secretScope+"/storageaccount}}"
                 },
                 "node_type_id": "Standard_DS3_v2",
                 "spark_env_vars": {
