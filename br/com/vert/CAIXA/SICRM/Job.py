@@ -119,7 +119,7 @@ class Job():
                 },
                 "autoscale": {
                     "min_workers": 1,
-                    "max_workers": 8
+                    "max_workers": 4
                 }
             },
             "email_notifications": {
