@@ -17,6 +17,8 @@ class Job():
 
     @URI.setter
     def URI(self,URI):
+        if URI.endswith("/"):
+            URI=URI[0:len(URI)-1]
         self.__URI=URI
 
     @property
