@@ -8,7 +8,7 @@ class Job():
         return self.__secretScope
 
     @secretScope.setter
-    def env(self,secretScope):
+    def secretScope(self,secretScope):
         self.__secretScope=secretScope
 
     @property
