@@ -7,9 +7,9 @@ cd APIClientDatabricks<br/>
 <br/>
 #Definir variáveis de ambiente<br/>
 #Atenção!!! O Databricks Instance deve ser do https:// até o .net!<br/>
-export SICRM_API=&#060<Databricks Instance&#062<br/>
-export SICRM_Token=&#060Token&#062<br/>
-export SICRM_Secret_Scope=&#060Secret Scope&#062<br/>
+export SICRM_API=&#060;<Databricks Instance&#062;<br/>
+export SICRM_Token=&#060;Token&#062;<br/>
+export SICRM_Secret_Scope=&#060;Secret Scope&#062;<br/>
 <br/>
 #Criando os jobs<br/>
 python3 main.py SICRM_Chave_Cliente /Shared/SICRM/CI/Cadastro/Visao_Chave_Cliente<br/>
