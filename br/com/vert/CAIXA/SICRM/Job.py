@@ -77,7 +77,7 @@ class Job():
         self.notebook=notebook
         self.name=name
 
-    def createJobIfNotExist(self):
+    def createJobIfNotExists(self):
         if self.jobExists()==False:
             self.jobCreate()
 
