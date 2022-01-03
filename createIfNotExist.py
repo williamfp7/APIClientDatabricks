@@ -4,6 +4,7 @@ import time
 from br.com.vert.CAIXA.SICRM.Job import *
 
 cv=Job(sys.argv[1],sys.argv[2])
+cv.createJobIfNotExist()
 #cv.jobExecute()
 #timer=0
 #while cv.jobVerify():
