@@ -69,16 +69,17 @@ class Job():
     def runId(self,id):
         self.__runId=id
 
-    def __init__(self,name,notebook):
+    def __init__(self,name,notebook=None):
         self.URI=os.getenv('SICRM_API')
         self.token=os.getenv('SICRM_Token')
         self.secretScope=os.getenv('SICRM_Secret_Scope')
         self.header={"Authorization": "Bearer "+self.token}
         self.notebook=notebook
         self.name=name
+
+    def createJobIfNotExist(self):
         if self.jobExists()==False:
             self.jobCreate()
-
 
     def jobExists(self):
         r=requests.get(self.URI+"/api/2.0/jobs/list",headers=self.header)
