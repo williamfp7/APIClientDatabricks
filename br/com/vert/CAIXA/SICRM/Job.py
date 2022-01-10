@@ -1,8 +1,12 @@
 import json
 import requests
 import os
+from .Logger import Logger
 
 class Job():
+    
+    log=Logger()
+
     @property
     def secretScope(self):
         return self.__secretScope
@@ -82,8 +86,19 @@ class Job():
             self.jobCreate()
 
     def jobExists(self):
-        r=requests.get(self.URI+"/api/2.0/jobs/list",headers=self.header)
-        jobList=json.loads(r.text)
+        self.log.write("Verificando a existência do job "+self.name)
+        try:
+            r=requests.get(self.URI+"/api/2.0/jobs/list",headers=self.header)
+        except Exception as e:
+            self.log.write("Erro: ou o endereço da API de listar está incorreto ou não há conexão com a internet")
+            self.log.error()
+            raise TypeError(e)
+        try:
+            jobList=json.loads(r.text)
+        except Exception as e:
+            self.log.write("Erro: a API não retornou um Json válido")
+            self.log.error()
+            raise TypeError(e)
         if len(jobList)!=0:
             for x in jobList["jobs"]:
                 if x["settings"]["name"]==self.name:
@@ -92,6 +107,7 @@ class Job():
         return False
 
     def jobCreate(self):
+        self.log.write("Criando o job "+self.name)
         conf={
             "name": self.name,
             "new_cluster": {
@@ -134,35 +150,71 @@ class Job():
             },
             "max_concurrent_runs": 1
         }
-        r=requests.post(self.URI+"/api/2.0/jobs/create",headers=self.header,data=json.dumps(conf))
-        tmp=json.loads(r.text)
+        try:
+            r=requests.post(self.URI+"/api/2.0/jobs/create",headers=self.header,data=json.dumps(conf))
+        except Exception as e:
+            self.log.write("Erro: ou o endereço da API de criar está incorreto ou não há conexão com a internet")
+            self.log.error()
+            raise TypeError(e)
+        try:
+            tmp=json.loads(r.text)
+        except Exception as e:
+            self.log.write("Erro: a API não retornou um Json válido")
+            self.log.error()
+            raise TypeError(e)        
         self.jobId=tmp["job_id"]
 
     def jobExecute(self):
+        self.log.write("Executando o job "+self.name)
         data=json.dumps({"job_id":self.jobId})
-        r=requests.post(self.URI+"/api/2.0/jobs/run-now",headers=self.header,data=data)
-        execution=json.loads(r.text)
+        try:
+            r=requests.post(self.URI+"/api/2.0/jobs/run-now",headers=self.header,data=data)
+        except Exception as e:
+            self.log.write("Erro: ou o endereço da API de executar está incorreto ou não há conexão com a internet")
+            raise TypeError(e)
+        try:
+            execution=json.loads(r.text)
+        except Exception as e:
+            self.log.write("Erro: a API não retornou um Json válido")
+            self.log.error()
+            raise TypeError(e)        
         self.runId=execution["run_id"]
 
     def jobVerify(self):
+        self.log.write("Verificando o status do job "+self.name)
         goodStatus=["PENDING","RUNNING","TERMINATING"]
         lifeCycleStateError={
-            "SKIPPED":TypeError("This run was aborted because a previous run of the same job was already active."),
-            "INTERNAL_ERROR":TypeError("Databricks job service error.")
+            "SKIPPED":"This run was aborted because a previous run of the same job was already active.",
+            "INTERNAL_ERROR":"Databricks job service error."
         }
         terminatedError={
-            "FAILED":TypeError("The task completed with an error."),
-            "TIMEDOUT":TypeError("The run was stopped after reaching the timeout."),
-            "CANCELED":TypeError("The run was canceled at user request.")
+            "FAILED":"The task completed with an error.",
+            "TIMEDOUT":"The run was stopped after reaching the timeout.",
+            "CANCELED":"The run was canceled at user request."
         }
         params={"run_id":self.runId}
-        r=requests.get(self.URI+"/api/2.0/jobs/runs/get",headers=self.header,params=params)
-        verification=json.loads(r.text)
+        try:
+            r=requests.get(self.URI+"/api/2.0/jobs/runs/get",headers=self.header,params=params)
+        except Exception as e:
+            self.log.write(Erro: ou o endereço da API de executar está incorreto ou não há conexão com a internet)
+            self.error()
+            raise TypeError(e)
+        try:
+            verification=json.loads(r.text)
+        except Exception as e:
+            self.log.write("Erro: a API não retornou um Json válido")
+            self.log.error()
+            raise TypeError(e)
+            
         if verification["state"]["life_cycle_state"]=="TERMINATED":
             if verification["state"]["result_state"]!="SUCCESS":
-                raise terminatedError[verification["state"]["result_state"]]
+                error=terminatedError[verification["state"]["result_state"]]
+                self.log.write(error)
+                raise TypeError(error)
             return False
         if verification["state"]["life_cycle_state"] in set(goodStatus):
             return True
         else:
-            raise lifeCycleStateError[verification["state"]["life_cycle_state"]]
+            error=lifeCycleStateError[verification["state"]["life_cycle_state"]]
+            self.log.write(error)
+            raise TypeError(error)

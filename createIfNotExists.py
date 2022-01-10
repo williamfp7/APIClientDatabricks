@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 import time
-from br.com.vert.CAIXA.SICRM.Job import *
+from br.com.vert.CAIXA.SICRM.Job import Job
 
 cv=Job(sys.argv[1],sys.argv[2])
 cv.createJobIfNotExists()
