@@ -196,7 +196,7 @@ class Job():
         try:
             r=requests.get(self.URI+"/api/2.0/jobs/runs/get",headers=self.header,params=params)
         except Exception as e:
-            self.log.write(Erro: ou o endereço da API de executar está incorreto ou não há conexão com a internet)
+            self.log.write("Erro: ou o endereço da API de executar está incorreto ou não há conexão com a internet")
             self.error()
             raise TypeError(e)
         try:
