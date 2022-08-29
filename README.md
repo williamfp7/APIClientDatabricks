@@ -7,20 +7,22 @@ cd APIClientDatabricks<br/>
 <br/>
 #Editar o arquivo sicrm.json variáveis de acesso<br/>
 #Atenção!!! O Databricks Instance deve ser do https:// até o .net!<br/>
+<pre>
 {
-    "URI":"<DATABRICKS URI>",
+    "URI":"&lt;DATABRICKS URI&gt;",
     "Token":{
-        "value":"<TOKEN>"
+        "value":"&lt;TOKEN&gt;"
     },
-    "proxies":{"http":"<PROXY>"}
+    "proxies":{"http":"&lt;PROXY&gt;"}
 }
+</pre>
 <br/>
 
 #Criptografar o arquivo sicrm.json para criar o sicrm.ini
-python3 encryptToken.py <SENHA><br/>
+python3 encryptToken.py &lt;SENHA&gt;<br/>
 <br/>
 #Criando os jobs<br/>
-python3 createIfNotExists.py <SENHA> <JOB NAME> <NOTEBOOK PATH> <SECRET SCOPE><br/>
+python3 createIfNotExists.py &lt;SENHA&gt; &lt;JOB NAME&gt; &lt;NOTEBOOK PATH&gt; &lt;SECRET SCOPE&gt;<br/>
 <br/>
 #Executando os Jobs<br/>
-python3 execute.py <SENHA> <JOB NAME><br/>
+python3 execute.py &lt;SENHA&gt; &lt;JOB NAME&gt;<br/>
