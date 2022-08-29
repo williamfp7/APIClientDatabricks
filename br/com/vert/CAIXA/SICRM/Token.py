@@ -45,9 +45,12 @@ class Token():
             
     def update(self):
         newToken=self.create()
-        self.value=newToken["token_value"]
-        self.id=newToken["token_info"]["token_id"]
-        self.expiration=newToken["token_info"]["expiry_time"]        
+        try:
+            self.value=newToken["token_value"]
+            self.id=newToken["token_info"]["token_id"]
+            self.expiration=newToken["token_info"]["expiry_time"]
+        except:
+            raise TypeError(newToken)        
 
     def list(self):
         endpoint="/api/2.0/token/list"

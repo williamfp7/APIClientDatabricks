@@ -49,11 +49,18 @@ class Job():
     def API(self,API):
         self.__API=API
 
-    def __init__(self,API,name,notebook=None,secretScope=None):
+    def __init__(self,API,name=None,notebook=None,secretScope=None):
         self.API=API
         self.secretScope=secretScope
         self.notebook=notebook
         self.name=name
+
+    def delete(self):
+        if self.exists():
+            data={"job_id":self.jobId}
+            self.API.post("/api/2.0/jobs/delete",data)
+        else:
+            print("o job não existe")
 
     def createIfNotExists(self):
         if self.exists()==False:
@@ -116,6 +123,8 @@ class Job():
         self.jobId=tmp["job_id"]
 
     def execute(self):
+        if self.exists()==False:
+            raise TypeError("O job não existe")
         data={"job_id":self.jobId}
         execution=self.API.post("/api/2.0/jobs/run-now",data)
         self.runId=execution["run_id"]
@@ -144,3 +153,10 @@ class Job():
         else:
             error=lifeCycleStateError[verification["state"]["life_cycle_state"]]
             raise TypeError(error)
+
+    def removeAll(self):
+        jobList=self.API.get("/api/2.0/jobs/list")
+        if len(jobList)!=0:
+            for x in jobList["jobs"]:
+                data={"job_id":x["job_id"]}
+                self.API.post("/api/2.0/jobs/delete",data)

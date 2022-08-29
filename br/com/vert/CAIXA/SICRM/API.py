@@ -23,6 +23,14 @@ class API():
         self.__URI=URI
 
     @property
+    def proxies(self):
+        return self.__proxies
+
+    @proxies.setter
+    def proxies(self, proxies):
+        self.__proxies=proxies
+
+    @property
     def token(self):
         return self.__token
 
@@ -43,6 +51,7 @@ class API():
         self.info=info
         metadata=self.__getInfo()
         self.URI=metadata["URI"]
+        self.proxies=metadata["proxies"]
         self.token=Token(self,metadata["Token"])
         self.__updateInfo()
 
@@ -71,19 +80,20 @@ class API():
                 \t\t\"value\":\""+self.token.value+"\",\
                 \t\t\"id\":\""+self.token.id+"\",\
                 \t\t\"expiration\":"+str(self.token.expiration)+"\
-            \t}\
+            \t},\
+            \t\"proxies\":"+str(self.proxies).replace("\'","\"")+"\
         }"
 
     def post(self,endpoint,conf):
         try:
-            r=requests.post(self.URI+endpoint,headers=self.header,data=json.dumps(conf))
+            r=requests.post(self.URI+endpoint,headers=self.header,data=json.dumps(conf),proxies=self.proxies)
         except Exception as e:
             raise TypeError(e)
         return self.__json2dict(r.text)
 
     def get(self,endpoint,params=None):
         try:
-            r=requests.get(self.URI+endpoint,headers=self.header,params=params)
+            r=requests.get(self.URI+endpoint,headers=self.header,params=params,proxies=self.proxies)
         except Exception as e:
             raise TypeError(e)
         return self.__json2dict(r.text)

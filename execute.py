@@ -1,14 +1,16 @@
 #!/usr/bin/python3
-import sys
+from br.com.vert.CAIXA.SICRM.Krypto.AES256 import AES256
+from br.com.vert.CAIXA.SICRM.API import API
+from br.com.vert.CAIXA.SICRM.Job import Job
 import time
-from br.com.vert.CAIXA.SICRM.Job import *
+import sys
 
-cv=Job(sys.argv[1])
-if cv.jobExists()==False:
-    raise TypeError("O job não existe")
-cv.jobExecute()
+cifra=AES256(sys.argv[1])
+API=API(cifra,"sicrm.ini")
+cv=Job(API,sys.argv[2])
+cv.execute()
 timer=0
-while cv.jobVerify():
+while cv.verify():
     print("time elapsed: "+str(timer)+"min")
     time.sleep(60)
     timer+=1

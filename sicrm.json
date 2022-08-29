@@ -1,0 +1,7 @@
+{
+    "URI":"https://adb-XXX.XXX.azuredatabricks.net/",
+    "Token":{
+        "value":"dapi2d953e5d5796efbd1aa2bb36ccb057fa"
+    },
+    "proxies":{"http":"http://197.221.89.70:8080"}
+}

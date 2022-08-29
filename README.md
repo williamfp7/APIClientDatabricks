@@ -5,22 +5,22 @@ git clone https://github.com/williamfp7/APIClientDatabricks.git<br/>
 #Entrar na pasta<br/>
 cd APIClientDatabricks<br/>
 <br/>
-#Definir variáveis de ambiente<br/>
+#Editar o arquivo sicrm.json variáveis de acesso<br/>
 #Atenção!!! O Databricks Instance deve ser do https:// até o .net!<br/>
-export SICRM_API=&#060;Databricks Instance&#062;<br/>
-export SICRM_Token=&#060;Token&#062;<br/>
-export SICRM_Secret_Scope=&#060;Secret Scope&#062;<br/>
+{
+    "URI":"<DATABRICKS URI>",
+    "Token":{
+        "value":"<TOKEN>"
+    },
+    "proxies":{"http":"<PROXY>"}
+}
+<br/>
+
+#Criptografar o arquivo sicrm.json para criar o sicrm.ini
+python3 encryptToken.py <SENHA><br/>
 <br/>
 #Criando os jobs<br/>
-python3 createIfNotExists.py SICRM_Chave_Cliente /Shared/SICRM/CI/Cadastro/Visao_Chave_Cliente<br/>
-python3 createIfNotExists.py SICRM_Cadastro_Cliente /Shared/SICRM/CI/Cadastro/Visao_Cadastro_Cliente<br/>
-python3 createIfNotExists.py SICRM_Cliente_COCLI /Shared/SICRM/CI/Cadastro/Visao_Cliente_COCLI<br/>
-python3 createIfNotExists.py SICRM_Cliente_Nicho /Shared/SICRM/CI/Cadastro/Visao_Cliente_Nicho<br/>
-python3 createIfNotExists.py SICRM_Cliente_Vinculo /Shared/SICRM/CI/Cadastro/Visao_Cliente_Vinculo<br/>
+python3 createIfNotExists.py <SENHA> <JOB NAME> <NOTEBOOK PATH> <SECRET SCOPE><br/>
 <br/>
 #Executando os Jobs<br/>
-python3 execute SICRM_Chave_Cliente<br/>
-python3 execute SICRM_Cadastro_Cliente<br/>
-python3 execute SICRM_Cliente_COCLI<br/>
-python3 execute SICRM_Cliente_Nicho<br/>
-python3 execute SICRM_Cliente_Vinculo<br/>
+python3 execute.py <SENHA> <JOB NAME><br/>
